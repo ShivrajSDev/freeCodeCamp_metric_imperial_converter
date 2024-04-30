@@ -3,6 +3,8 @@
 const expect = require('chai').expect;
 const ConvertHandler = require('../controllers/convertHandler.js');
 
+const ERROR_RESPONSE = "error";
+
 module.exports = function (app) {
   
   let convertHandler = new ConvertHandler();
@@ -14,25 +16,38 @@ module.exports = function (app) {
       let inputNum = convertHandler.getNum(input);
       let inputUnit = convertHandler.getUnit(input);
 
-      if(!inputNum && !inputUnit) {
+      if(inputNum === ERROR_RESPONSE && inputUnit === ERROR_RESPONSE) {
         res.json("invalid number and unit");
-      } else if(!inputNum) {
+        return;
+      } else if(inputNum === ERROR_RESPONSE) {
         res.json("invalid number");
-      } else if(!inputUnit) {
+        return;
+      } else if(inputUnit === ERROR_RESPONSE) {
         res.json("invalid unit");
-      } else {
-        let outputNum = convertHandler.convert(inputNum, inputUnit);
-        let outputUnit = convertHandler.getReturnUnit(inputUnit);
-        let outputString = convertHandler.getString(inputNum, inputUnit, outputNum, outputUnit);
+        return;
+      } 
 
-        let data = {
-          initNum: inputNum,
-          initUnit: inputUnit,
-          returnNum: outputNum,
-          returnUnit: outputUnit,
-          string: outputString
-        };
-        res.json(data);
+      let outputNum = convertHandler.convert(inputNum, inputUnit);
+      if(outputNum === ERROR_RESPONSE) {
+        res.json("invalid number and unit");
+        return;
       }
+      let outputUnit = convertHandler.getReturnUnit(inputUnit);
+      if(outputUnit === ERROR_RESPONSE) {
+        res.json("invalid unit");
+        return;
+      }
+
+      let outputString = convertHandler.getString(inputNum, inputUnit, outputNum, outputUnit);
+
+      let data = {
+        initNum: inputNum,
+        initUnit: inputUnit,
+        returnNum: outputNum,
+        returnUnit: outputUnit,
+        string: outputString
+      };
+      
+      res.json(data);
     });
 };

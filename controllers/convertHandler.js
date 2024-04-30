@@ -1,4 +1,6 @@
 function ConvertHandler() {
+  const ERROR_RESPONSE = "error";
+
   conversionTypes = [
     {
       type: 'gal',
@@ -47,14 +49,16 @@ function ConvertHandler() {
         
         if(!numString || numString.length === 0) {
           result = 1;
+        } else if ((numString.match(/\//g) || []).length > 1) {
+          return ERROR_RESPONSE;
         } else {
           result = eval(numString);
         }
       } catch {
-        result = undefined;
+        return ERROR_RESPONSE;
       }
     } else {
-      result = undefined;
+      return ERROR_RESPONSE;
     }
 
     return result;
@@ -74,18 +78,16 @@ function ConvertHandler() {
         let unitString = input.substring(lastIndex);
         
         if(!unitString || unitString.length === 0) {
-          result = undefined;
+          return ERROR_RESPONSE;
         } else {
           let existing = conversionTypes.find(d => d.type.toLowerCase() === unitString.toLowerCase());
-          if(existing) {
-            result = existing.type;
-          }
+            result = existing ? existing.type : ERROR_RESPONSE;
         }
       } catch {
-        result = undefined;
+        return ERROR_RESPONSE;
       }
     } else {
-      result = undefined;
+      return ERROR_RESPONSE;
     }
 
     return result;
@@ -95,9 +97,8 @@ function ConvertHandler() {
     let result;
 
     let existing = conversionTypes.find(d => d.type.toLowerCase() === initUnit.toLowerCase());
-    if(existing) {
-      result = existing.oppositeType;
-    }
+    
+    result = existing ? existing.oppositeType : ERROR_RESPONSE;
     
     return result;
   };
@@ -106,8 +107,8 @@ function ConvertHandler() {
     let result;
 
     let existing = conversionTypes.find(d => d.type === unit);
-    if(existing)
-      result = existing.fullName;
+    
+    result = existing ? existing.fullName : ERROR_RESPONSE;;
 
     return result;
   };
@@ -138,7 +139,7 @@ function ConvertHandler() {
         result = parseFloat((initNum / miToKm).toFixed(5));
         break;
       default:
-        result = '';
+        result = ERROR_RESPONSE;
         break;
     }
     
