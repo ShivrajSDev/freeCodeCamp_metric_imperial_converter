@@ -41,7 +41,7 @@ function ConvertHandler() {
     {
       try {
         let lastIndex = 0;
-        let pattern = /\d/g;
+        let pattern = /[\d\/]/g;
         while(pattern.test(input) == true) {
           lastIndex = pattern.lastIndex;
         }
@@ -51,8 +51,11 @@ function ConvertHandler() {
           result = 1;
         } else if ((numString.match(/\//g) || []).length > 1) {
           return ERROR_RESPONSE;
+        } else if ((numString.match(/-/g) || []).length >0) {
+          return ERROR_RESPONSE;
         } else {
-          result = eval(numString);
+          let evalResult = eval(numString);
+          result = evalResult >= 0 ? evalResult : ERROR_RESPONSE;
         }
       } catch {
         return ERROR_RESPONSE;
@@ -71,7 +74,7 @@ function ConvertHandler() {
     {
       try {
         let lastIndex = 0;
-        let pattern = /\d/g;
+        let pattern = /[\d\/]/g;
         while(pattern.test(input) == true) {
           lastIndex = pattern.lastIndex;
         }
