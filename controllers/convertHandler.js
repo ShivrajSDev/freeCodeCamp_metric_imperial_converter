@@ -1,7 +1,7 @@
 function ConvertHandler() {
   const ERROR_RESPONSE = "error";
 
-  conversionTypes = [
+  const conversionTypes = [
     {
       type: 'gal',
       fullName: 'gallons',
