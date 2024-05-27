@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 suite('Functional Tests', function() {
     this.timeout(5000);
 
-    test('Test GET /api/convert with valid input', function() {
+    test('Test GET /api/convert with valid input', function(done) {
         chai
             .request(server)
             .keepOpen()
@@ -38,9 +38,11 @@ suite('Functional Tests', function() {
                 assert.equal(res.body.string, '0.5 kilometers converts to 0.31069 miles');
                 assert.equal(JSON.stringify(res.body), '{"initNum":0.5,"initUnit":"km","returnNum":0.31069,"returnUnit":"mi","string":"0.5 kilometers converts to 0.31069 miles"}');
             });
+
+        done();
     });
 
-    test('Test GET /api/convert with invalid input unit', function() {
+    test('Test GET /api/convert with invalid input unit', function(done) {
         chai
             .request(server)
             .keepOpen()
@@ -58,9 +60,11 @@ suite('Functional Tests', function() {
                 assert.equal(res.status, 200);
                 assert.equal(res.body, 'invalid unit');
             });
+
+        done();
     });
 
-    test('Test GET /api/convert with invalid number', function() {
+    test('Test GET /api/convert with invalid number', function(done) {
         chai
             .request(server)
             .keepOpen()
@@ -87,9 +91,11 @@ suite('Functional Tests', function() {
                 assert.equal(res.status, 200);
                 assert.equal(res.body, 'invalid number');
             });
+
+        done();
     });
 
-    test('Test GET /api/convert with invalid number and unit', function() {
+    test('Test GET /api/convert with invalid number and unit', function(done) {
         chai
             .request(server)
             .keepOpen()
@@ -97,10 +103,11 @@ suite('Functional Tests', function() {
             .end(function (err, res) {
                 assert.equal(res.status, 200);
                 assert.equal(res.body, 'invalid number and unit');
+                done();
             });
     });
 
-    test('Test GET /api/convert with no number', function() {
+    test('Test GET /api/convert with no number', function(done) {
         chai
             .request(server)
             .keepOpen()
@@ -160,5 +167,7 @@ suite('Functional Tests', function() {
                 assert.equal(res.body.string, '1 kilometers converts to 0.62137 miles');
                 assert.equal(JSON.stringify(res.body), '{"initNum":1,"initUnit":"km","returnNum":0.62137,"returnUnit":"mi","string":"1 kilometers converts to 0.62137 miles"}');
             });
+        
+            done();
     });
 });
