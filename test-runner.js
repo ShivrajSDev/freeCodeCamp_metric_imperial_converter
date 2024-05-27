@@ -33,7 +33,7 @@ const Mocha = require('mocha'),
     path = require('path');
 
 let mocha = new Mocha();
-let testDir = process.cwd() + '/tests'
+let testDir = './tests'
 
 
 // Add each .js file to the mocha instance
