@@ -2,15 +2,23 @@
     "version": 2,
     "builds": [
         {
-        "src": "server.js",
-        "use": "@vercel/node",
-        "config": { "includeFiles": ["public/**", "tests/**", "controllers/**", "views/**"] }
+            "src": "server.js",
+            "use": "@vercel/node",
+            "config": { "includeFiles" : [ "tests/**", "controllers/**"]}
+        },
+        {
+            "src": "public/**",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "views/**",
+            "use": "@vercel/static"
         }
     ],
-    "routes": [
+    "rewrites": [
         {
-        "src": "/(.*)",
-        "dest": "server.js"
+            "source": "/(.*)",
+            "destination": "server.js"
         }
     ]
 }
